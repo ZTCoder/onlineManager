@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/sbmv_db?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/ugaoxin_db?useUnicode=true&characterEncoding=UTF-8
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
@@ -15,7 +15,7 @@ spring:
     time-zone: GMT+8
 
 mybatis:
-  type-aliases-package: com.ugaoxin.springbootmybatisplus.pojo
+  type-aliases-package: com.zt.springboot_mybatisplus_vue.pojo
 mybatis-plus:
   global-config:
     db-config:
