@@ -61,7 +61,7 @@ public class YunResult<T> implements Serializable {
         return this.status == ResponseCode.SUCCESS.getCode();
     }
 
-    //5.定义返回对象的方法
+    //5.定义返回对象的方法（泛型方法）
     public static <T> YunResult<T> createBySuccess() {
         return new YunResult<T>(ResponseCode.SUCCESS.getCode());
     }

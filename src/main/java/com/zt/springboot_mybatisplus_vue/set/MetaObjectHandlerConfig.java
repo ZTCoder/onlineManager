@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-/** 
-* @version:1.0
-* @Description: www.ugaoxin.com
-* @author: Array老师  
-*/  
- 
+/**
+ * @version:1.0
+ * @Description: www.ugaoxin.com
+ * @author: Array老师
+ */
+
 @Component
 public class MetaObjectHandlerConfig implements MetaObjectHandler {
 

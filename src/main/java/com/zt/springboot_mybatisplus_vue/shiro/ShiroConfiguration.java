@@ -83,6 +83,7 @@ public class ShiroConfiguration {
 		//散列的次数，比如散列两次，相当于 md5(md5(""));
 		hashedCredentialsMatcher.setHashIterations(2);
 		//storedCredentialsHexEncoded默认是true，此时用的是密码加密用的是Hex编码；false时用Base64编码
+		//存储散列后的密码是否是16进制的。
 		hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
 		return hashedCredentialsMatcher;
 	}
