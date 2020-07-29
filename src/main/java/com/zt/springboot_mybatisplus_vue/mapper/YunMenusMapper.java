@@ -2,6 +2,8 @@ package com.zt.springboot_mybatisplus_vue.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zt.springboot_mybatisplus_vue.pojo.YunMenus;
+import com.zt.springboot_mybatisplus_vue.vo.YunMenusVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -28,4 +30,11 @@ public interface YunMenusMapper extends BaseMapper<YunMenus> {
 
     @Select("SELECT * FROM yun_menus ym, yun_role_menus yrm WHERE yrm.permission_id = ym.id and yrm.role_id = #{0}")
     List<YunMenus> getMenusListByRoleId(Long rId);
+
+    @Select("SELECT * FROM yun_menus ym WHERE ym.parent_id = #{0}")
+    List<YunMenusVo> getMenusListByPid(Long pId);
+
+    @Select("SELECT ym.id, ym.menu_name, ym.parent_id, ym.menu_code, ym.permission_name FROM yun_menus ym, yun_role_menus yrm " +
+            "WHERE ym.id = yrm.permission_id and ym.parent_id = #{pId} and yrm.role_id = #{rId} ORDER BY ym.id")
+    List<YunMenus> getPerMisssion(@Param("pId") Long pId, @Param("rId") Long rId);
 }
