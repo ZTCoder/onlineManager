@@ -1,12 +1,13 @@
 package com.zt.springboot_mybatisplus_vue.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.io.Serializable;
 import java.util.Date;
-
+@TableName("t_product")
 public class Product implements Serializable {
     //项目本身生成主键，存在长度问题，需要人为采用String序列化处理ID
     @TableId(value = "id")

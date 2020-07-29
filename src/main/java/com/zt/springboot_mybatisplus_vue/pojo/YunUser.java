@@ -1,5 +1,6 @@
 package com.zt.springboot_mybatisplus_vue.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -8,6 +9,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class YunUser implements Serializable {
+    @TableField(exist = false)
+    private YunRole yunRole;
+
+    public YunRole getYunRole() {
+        return yunRole;
+    }
+
+    public void setYunRole(YunRole yunRole) {
+        this.yunRole = yunRole;
+    }
+
     //项目本身生成主键，存在长度问题，需要人为采用String序列化处理ID
     @TableId(value = "id")
     @JsonSerialize(using = ToStringSerializer.class)
