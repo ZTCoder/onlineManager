@@ -42,4 +42,24 @@ public class LoginController {
         }
         return YunResult.createByError();
     }
+
+    /**
+     * 获取登录用户信息
+     *
+     */
+    @RequestMapping("/getinfo")
+    public YunResult getInfo() {
+        YunResult info = loginService.getInfo();
+        return YunResult.createBySuccess("获取信息成功！", info);
+    }
+
+    /**
+     * 退出当前用户
+     * @return
+     */
+    @RequestMapping("/logout")
+    public YunResult logOut() {
+        YunResult result = loginService.logOut();
+        return result;
+    }
 }
