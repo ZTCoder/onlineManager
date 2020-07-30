@@ -3,9 +3,11 @@ package com.zt.springboot_mybatisplus_vue.service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zt.springboot_mybatisplus_vue.mapper.YunMenusMapper;
 import com.zt.springboot_mybatisplus_vue.pojo.YunMenus;
+import com.zt.springboot_mybatisplus_vue.vo.YunMenusVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 @Service
@@ -36,5 +38,20 @@ public class YunMenusServiceImpl extends ServiceImpl<YunMenusMapper, YunMenus> i
     @Override
     public List<YunMenus> getMenusListByRoleId(Long rId) {
         return yunMenusMapper.getMenusListByRoleId(rId);
+    }
+
+    @Override
+    public List<YunMenusVo> getAllList() {
+        //查询根节点
+        List<YunMenusVo> yunMenusVoList = yunMenusMapper.getMenusListByPid(0L);
+        List<YunMenusVo> yunMenusVoList1 = new ArrayList<>();
+
+        //遍历根节点
+        for(YunMenusVo yunMenusVo : yunMenusVoList) {
+            List<YunMenus> permissionList = yunMenusMapper.getPermissionList(yunMenusVo.getId());
+            yunMenusVo.setPermissionList(permissionList);
+            yunMenusVoList1.add(yunMenusVo);
+        }
+        return yunMenusVoList1;
     }
 }

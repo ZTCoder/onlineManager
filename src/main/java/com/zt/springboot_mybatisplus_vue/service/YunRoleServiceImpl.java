@@ -1,11 +1,13 @@
 package com.zt.springboot_mybatisplus_vue.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zt.springboot_mybatisplus_vue.mapper.YunMenusMapper;
 import com.zt.springboot_mybatisplus_vue.mapper.YunRoleMapper;
 import com.zt.springboot_mybatisplus_vue.mapper.YunRoleMenusMapper;
 import com.zt.springboot_mybatisplus_vue.pojo.YunMenus;
 import com.zt.springboot_mybatisplus_vue.pojo.YunRole;
+import com.zt.springboot_mybatisplus_vue.pojo.YunRoleMenus;
 import com.zt.springboot_mybatisplus_vue.vo.YunMenusVo;
 import com.zt.springboot_mybatisplus_vue.vo.YunRoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,32 @@ public class YunRoleServiceImpl extends ServiceImpl<YunRoleMapper, YunRole> impl
         Map map = new HashMap();
         map.put("list", yunRoleVoList);
         return map;
+    }
+
+    /**
+     * 权限分配
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public int setMenus(JSONObject jsonObject) {
+        int count = 0;
+        //vue的tree的特性["100", "101" ]
+        String ids = jsonObject.getString("ids");
+        Long roleId = jsonObject.getLong("roleId");
+        String[] checkIds = ids.substring(1, ids.length()-1).split(",");
+        //为了保证选中的一致性，可以先删除再分配
+        yunRoleMenusMapper.deleteByRoleId(roleId);
+        for(String id : checkIds) {
+            if (id != null && !id.equals("")) {
+                Long checkId = Long.valueOf(id).longValue();
+                YunRoleMenus yunRoleMenus = new YunRoleMenus();
+                yunRoleMenus.setRoleId(roleId);
+                yunRoleMenus.setPermissionId(checkId);
+                int insert = yunRoleMenusMapper.insert(yunRoleMenus);
+                count = count + insert;
+            }
+        }
+        return count;
     }
 }
