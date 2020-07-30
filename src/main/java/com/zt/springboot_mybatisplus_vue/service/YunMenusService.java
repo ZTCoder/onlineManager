@@ -5,6 +5,7 @@ import com.zt.springboot_mybatisplus_vue.pojo.YunMenus;
 import com.zt.springboot_mybatisplus_vue.vo.YunMenusVo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface YunMenusService extends IService<YunMenus> {
@@ -15,4 +16,6 @@ public interface YunMenusService extends IService<YunMenus> {
     List<YunMenus> getMenusListByRoleId(Long rId);
 
     List<YunMenusVo> getAllList();
+
+    Map getMenusList();
 }

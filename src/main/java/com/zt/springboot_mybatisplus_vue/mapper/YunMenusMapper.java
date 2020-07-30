@@ -40,4 +40,7 @@ public interface YunMenusMapper extends BaseMapper<YunMenus> {
 
     @Select("SELECT * FROM yun_menus ym WHERE ym.parent_id = #{0}")
     List<YunMenus> getPermissionList(Long id);
+
+    @Select("SELECT * FROM yun_menus ym")
+    List<YunMenusVo> getList();
 }

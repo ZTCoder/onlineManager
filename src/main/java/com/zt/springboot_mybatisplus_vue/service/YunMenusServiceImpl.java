@@ -7,9 +7,8 @@ import com.zt.springboot_mybatisplus_vue.vo.YunMenusVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 @Service
 public class YunMenusServiceImpl extends ServiceImpl<YunMenusMapper, YunMenus> implements YunMenusService{
 
@@ -53,5 +52,25 @@ public class YunMenusServiceImpl extends ServiceImpl<YunMenusMapper, YunMenus> i
             yunMenusVoList1.add(yunMenusVo);
         }
         return yunMenusVoList1;
+    }
+
+    @Override
+    public Map getMenusList() {
+        //查询根节点
+        List<YunMenusVo> yunMenusVoList = yunMenusMapper.getMenusListByPid(0L);
+        //查询所有记录
+        List<YunMenusVo> menusList = yunMenusMapper.getList();
+        for(YunMenusVo yunMenusVo : yunMenusVoList) {
+            List<YunMenusVo> children = new ArrayList<>();
+            for(YunMenusVo yunMenus : menusList) {
+                if(yunMenus.getParentId().equals(yunMenusVo.getId())) {
+                    children.add(yunMenus);
+                }
+            }
+            yunMenusVo.setChildren(children);
+        }
+        Map map = new HashMap();
+        map.put("menusMap",yunMenusVoList);
+        return map;
     }
 }
