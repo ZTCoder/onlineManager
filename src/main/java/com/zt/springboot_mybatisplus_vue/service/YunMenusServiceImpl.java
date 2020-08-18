@@ -58,8 +58,11 @@ public class YunMenusServiceImpl extends ServiceImpl<YunMenusMapper, YunMenus> i
     public Map getMenusList() {
         //查询根节点
         List<YunMenusVo> yunMenusVoList = yunMenusMapper.getMenusListByPid(0L);
+        System.out.println("yunMenusMapper----> " + yunMenusMapper);
+//        System.out.println("yunMenusVoList---->" + yunMenusVoList);
         //查询所有记录
         List<YunMenusVo> menusList = yunMenusMapper.getList();
+//        System.out.println("menusList---->" + menusList);
         for(YunMenusVo yunMenusVo : yunMenusVoList) {
             List<YunMenusVo> children = new ArrayList<>();
             for(YunMenusVo yunMenus : menusList) {
@@ -70,6 +73,7 @@ public class YunMenusServiceImpl extends ServiceImpl<YunMenusMapper, YunMenus> i
             yunMenusVo.setChildren(children);
         }
         Map map = new HashMap();
+        System.out.println("yunMenusVoList111---->" + yunMenusVoList);
         map.put("menusMap",yunMenusVoList);
         return map;
     }

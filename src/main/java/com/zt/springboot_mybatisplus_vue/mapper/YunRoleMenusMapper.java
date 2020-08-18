@@ -17,6 +17,6 @@ public interface YunRoleMenusMapper extends BaseMapper<YunRoleMenus> {
 
     int updateByPrimaryKey(YunRoleMenus record);
 
-    @Select("DELETE * FROM yun_role_menus WHERE role_id = #{0}")
+    @Select("DELETE FROM yun_role_menus WHERE role_id = #{0}")
     void deleteByRoleId(Long roleId);
 }

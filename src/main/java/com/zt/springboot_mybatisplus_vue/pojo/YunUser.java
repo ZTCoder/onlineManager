@@ -10,20 +10,11 @@ import java.util.Date;
 
 public class YunUser implements Serializable {
     @TableField(exist = false)
-    private YunRole yunRole;
-
-    public YunRole getYunRole() {
-        return yunRole;
-    }
-
-    public void setYunRole(YunRole yunRole) {
-        this.yunRole = yunRole;
-    }
+    private YunRole role;
 
     //项目本身生成主键，存在长度问题，需要人为采用String序列化处理ID
     @TableId(value = "id")
     @JsonSerialize(using = ToStringSerializer.class)
-
     private Long id;
 
     private String userName;
@@ -32,7 +23,11 @@ public class YunUser implements Serializable {
 
     private String realName;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long roleId;
+
+    @TableField(exist = false)
+    private String roleName;
 
     private Date createTime;
 
@@ -102,5 +97,21 @@ public class YunUser implements Serializable {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete == null ? null : isDelete.trim();
+    }
+
+    public YunRole getRole() {
+        return role;
+    }
+
+    public void setRole(YunRole role) {
+        this.role = role;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("yun/product")
 @RestController
-public class PageController {
+public class ProductController {
     @Autowired
     private ProductService productService;
 
@@ -88,6 +88,11 @@ public class PageController {
             //获取商品id
             Long id = jsonObject.getLong("id");
             String is_delete = jsonObject.getString("is_delete");//0表示上架，1表示下架
+            if(is_delete.equals("0")) {
+                is_delete = "1";
+            } else {
+                is_delete = "0";
+            }
             //获取商品名称
             String productName = jsonObject.getString("productName");
             //商品创建时间和修改时间由数据库的CURRENT_TIMESTAMP特性完成，这里不用操作

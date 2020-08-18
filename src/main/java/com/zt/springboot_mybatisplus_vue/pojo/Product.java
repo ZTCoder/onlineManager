@@ -12,7 +12,6 @@ public class Product implements Serializable {
     //项目本身生成主键，存在长度问题，需要人为采用String序列化处理ID
     @TableId(value = "id")
     @JsonSerialize(using = ToStringSerializer.class)
-
     private Long id;
 
     private String productName;

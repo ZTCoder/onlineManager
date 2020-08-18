@@ -71,7 +71,7 @@ public class YunRoleServiceImpl extends ServiceImpl<YunRoleMapper, YunRole> impl
         yunRoleMenusMapper.deleteByRoleId(roleId);
         for(String id : checkIds) {
             if (id != null && !id.equals("")) {
-                Long checkId = Long.valueOf(id).longValue();
+                Long checkId = Long.valueOf(id.trim()).longValue();
                 YunRoleMenus yunRoleMenus = new YunRoleMenus();
                 yunRoleMenus.setRoleId(roleId);
                 yunRoleMenus.setPermissionId(checkId);

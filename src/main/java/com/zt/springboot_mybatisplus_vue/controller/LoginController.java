@@ -47,10 +47,11 @@ public class LoginController {
      * 获取登录用户信息
      *
      */
-    @RequestMapping("/getinfo")
+    @RequestMapping("/getInfo")
     public YunResult getInfo() {
-        YunResult info = loginService.getInfo();
-        return YunResult.createBySuccess("获取信息成功！", info);
+//        YunResult info = loginService.getInfo();
+//        return YunResult.createBySuccess("获取信息成功！", info);
+        return loginService.getInfo();
     }
 
     /**

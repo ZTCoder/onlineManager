@@ -9,6 +9,7 @@ import com.zt.springboot_mybatisplus_vue.pojo.YunUser;
 import com.zt.springboot_mybatisplus_vue.service.YunRoleService;
 import com.zt.springboot_mybatisplus_vue.service.YunUserService;
 import com.zt.springboot_mybatisplus_vue.util.YunResult;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +33,8 @@ public class UserController {
      * @param pageRow
      * @return
      */
-    @RequiresPermissions("yun:user:list")
     @RequestMapping("list")
+    @RequiresPermissions("yun:user:list")
     public YunResult getList(int pageNum, int pageRow) {
         IPage<YunUser> iPage = new Page<>(pageNum, pageRow);
         //只查询没有冻结的用户即is_delete=0
@@ -41,7 +42,8 @@ public class UserController {
         List list = new ArrayList<>();
         for(YunUser yunUser : page.getRecords()) {
             YunRole yunRole = yunRoleService.getById(yunUser.getRoleId());
-            yunUser.setYunRole(yunRole);
+            yunUser.setRoleName(yunRole.getRoleName());
+            yunUser.setRole(yunRole);
             list.add(yunUser);
         }
         page.setRecords(list);
@@ -81,25 +83,25 @@ public class UserController {
      */
     @RequiresPermissions("yun:user:update")
     @RequestMapping("update")
-    public YunResult update(@RequestBody JSONObject jsonObject) {
-        if(jsonObject != null && !jsonObject.equals("")) {
+    public YunResult update(@RequestBody JSONObject jsonObject){
+        if(jsonObject!=null&&!jsonObject.equals("")){
             String userName = jsonObject.getString("userName");
             String passWord = jsonObject.getString("passWord");
             String realName = jsonObject.getString("realName");
-            Long rId = jsonObject.getLong("roleId");
+            Long rId =jsonObject.getLong("roleId");
             Long id = jsonObject.getLong("id");
-
             YunUser yunUser = new YunUser();
             yunUser.setUserName(userName);
             yunUser.setPassWord(passWord);
+            yunUser.setIsDelete("0");
             yunUser.setRealName(realName);
             yunUser.setRoleId(rId);
-            yunUser.setIsDelete("0");
             yunUser.setId(id);
-            boolean b = yunUserService.saveOrUpdate(yunUser);
-            return YunResult.createBySuccess("更新用户信息成功！", b);
+            boolean flag = yunUserService.saveOrUpdate(yunUser);
+            return  YunResult.createBySuccess("更新用户成功！",flag);
         }
-        return YunResult.createByError();
+        return  YunResult.createByError();
+
     }
 
     /**
@@ -109,16 +111,24 @@ public class UserController {
      */
     @RequiresPermissions("yun:user:delete")
     @RequestMapping("delete")
-    public YunResult delete(@RequestBody JSONObject jsonObject) {
-        if(jsonObject != null && !jsonObject.equals("")) {
-            String is_delete = jsonObject.getString("is_delete");
+    public YunResult delete(@RequestBody JSONObject jsonObject){
+        if(jsonObject!=null&&!jsonObject.equals("")){
+            String is_delete = jsonObject.getString("isDelete");
             Long id = jsonObject.getLong("id");
             YunUser yunUser = new YunUser();
-            yunUser.setId(id);
             yunUser.setIsDelete(is_delete);
-            boolean b = yunUserService.saveOrUpdate(yunUser);
-            return YunResult.createBySuccess("冻结/解冻用户成功", b);
+            yunUser.setId(id);
+            boolean flag = yunUserService.saveOrUpdate(yunUser);
+            return  YunResult.createBySuccess("冻结/解冻用户成功！",flag);
         }
-        return YunResult.createByError();
+        return  YunResult.createByError();
+
+    }
+
+    @RequiresPermissions(value = {"yun:user:add","yun:user:update"},logical = Logical.OR)
+    @RequestMapping("getRolelist")
+    public YunResult getRolelist(){
+        List<YunRole> list = yunRoleService.list();
+        return YunResult.createBySuccess("获取权限成功！",list);
     }
 }

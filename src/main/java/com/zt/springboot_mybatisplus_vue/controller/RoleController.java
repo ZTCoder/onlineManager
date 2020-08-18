@@ -26,13 +26,11 @@ public class RoleController {
 
     /**
      * 查询带有菜单的角色列表
-     * @param pageNum
-     * @param pageRow
      * @return
      */
     @RequiresPermissions("yun:role:list")
     @RequestMapping("list")
-    public YunResult getList(int pageNum, int pageRow) {
+    public YunResult getList() {
         Map map = yunRoleService.getList();
         return YunResult.createBySuccess("查询成功", map);
     }
@@ -42,7 +40,7 @@ public class RoleController {
      * @return
      */
     @RequiresPermissions("yun:role:list")
-    @RequestMapping("getAllList")
+    @RequestMapping("getAlllist")
     public YunResult getAllList() {
         List<YunMenusVo> list = yunMenusService.getAllList();
         return YunResult.createBySuccess("查询成功", list);
@@ -53,41 +51,45 @@ public class RoleController {
      * @param jsonObject
      * @return
      */
-    @RequiresPermissions("yun:role:add")
-    @RequestMapping("add")
-    public YunResult add(@RequestBody JSONObject jsonObject) {
-        if(jsonObject != null && !jsonObject.equals("")) {
-            String roleName = jsonObject.getString("roleName");
-            String is_delete = jsonObject.getString("is_delete");
-
-            YunRole yunRole = new YunRole();
-            yunRole.setRoleName(roleName);
-
-            if(is_delete != null && !is_delete.equals("")) {
-                if (is_delete.equals("true")) {
-                    yunRole.setIsDelete("0");
-                } else {
-                    yunRole.setIsDelete("1");
-                }
-            }
-            boolean add = yunRoleService.saveOrUpdate(yunRole);
-            return YunResult.createBySuccess("添加成功", add);
-        }
-        return YunResult.createByError();
-    }
 
     /**
      * role更新方法
-     * @param jsonObject
+     * @param yunRole
      * @return
      */
+    @RequiresPermissions( value = {"yun:role:add","yun:role:update"},logical = Logical.OR)
+    @RequestMapping("add")
+    public YunResult add(@RequestBody JSONObject yunRole){
+        if(yunRole!=null&&!yunRole.equals("")) {
+            String roleName = yunRole.getString("roleName");
+            Long id = yunRole.getLong("id");
+            //is_delete通常前端会把0和1变成true 和 flase
+            String is_delete = yunRole.getString("isDelete");// "true","false"
+            YunRole yunRole1 = new YunRole();
+            yunRole1.setId(id);
+            yunRole1.setRoleName(roleName);
+            if(is_delete!=null&&!is_delete.equals("")){
+                if(is_delete.equals("true")) {
+                    yunRole1.setIsDelete("0");//表示逻辑未删除
+                } else {
+                    yunRole1.setIsDelete("1");//表示逻辑删除
+                }
+            }
+            boolean saveOrUpdate = yunRoleService.saveOrUpdate(yunRole1);
+            return  YunResult.createBySuccess("执行成功！",saveOrUpdate);
+
+        }
+
+        return YunResult.createByError();
+    }
+
     @RequiresPermissions("yun:role:update")
     @RequestMapping("update")
     public YunResult update(@RequestBody JSONObject jsonObject) {
         if (jsonObject != null && !jsonObject.equals("")) {
             String roleName = jsonObject.getString("roleName");
             Long id = jsonObject.getLong("id");
-            String is_delete = jsonObject.getString("is_delete");
+            String is_delete = jsonObject.getString("isDelete");
             YunRole yunRole = new YunRole();
             yunRole.setRoleName(roleName);
             yunRole.setId(id);
@@ -109,9 +111,11 @@ public class RoleController {
      * @param jsonObject
      * @return
      */
+    @RequiresPermissions("yun:role:delete")
+    @RequestMapping("delete")
     public YunResult delete(@RequestBody JSONObject jsonObject) {
         if(jsonObject != null && !jsonObject.equals("")) {
-            Long id = jsonObject.getLong("id");
+            Long id = jsonObject.getLong("yunRole");
             boolean removeById = yunRoleService.removeById(id);
             return YunResult.createBySuccess("删除成功", removeById);
         }
