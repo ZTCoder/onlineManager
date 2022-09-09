@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.23</version>
+            <version>1.26</version>
         </dependency>
         <!-- spring boot热部署，html修改无需重启项目 -->
         <dependency>
